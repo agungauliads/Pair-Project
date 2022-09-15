@@ -125,23 +125,48 @@ class Controller {
             });
     }
 
-    // static createProfile(req, res) {
-    //     // res.send('Hello World Ini halaman add profile!')
-    //     res.render('formProfile')
-    // }
+    static editProfile(req, res) {
+        // res.send('Hello World Ini halaman add profile!')
+        
+        const { id } = req.session.user.id
+        console.log(req.session.user.id)
+        // User.findOne({
+        //     include: [Profile, Post],
+        //     where: {
+        //         id: id
+        //     }
+        // })
 
-    // static handleCreateProfile(req, res) {
-    //     const id = req.session.user.id
-    //     const { fullname, address, bio, photo } = req.body
-    //     Profile.create({ fullname, address, bio, photo, UserId: id })
-    //         .then((result) => {
-    //             // res.send(result)
-    //             res.redirect(`/index`)
-    //         })
-    //         .catch(err => {
-    //             res.send(err)
-    //         })
-    // }
+        Profile.findAll({
+            where: {
+                UserId: id
+            }
+        })
+        .then((result) => {
+            // console.log(result, "<<<<<");
+            res.send(result)
+            // res.render('formEditProfile', {result})
+        })
+        .catch(err => {
+            res.send(err)
+        })
+
+    }
+
+    static handleEditProfile(req, res) {
+        // console.log(req.body);
+        const id = req.session.user.id
+        const { fullname, address, bio, photo } = req.body
+        Profile.create({ fullname, address, bio, photo, UserId: id })
+            .then((result) => {
+                // res.send(result)
+                res.redirect(`/profile`)
+            })
+            .catch(err => {
+                // console.log(err, "<<<<<<")
+                res.send(err)
+            })
+    }
 
     static createPost(req, res) {
         res.render('formPost')
