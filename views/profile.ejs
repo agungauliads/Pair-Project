@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/profile.css" rel="stylesheet" type="text/css">
+    <title>Profile</title>
+</head>
+
+<body>
+    <div class="menu">
+        <img draggable="false" class="logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/pinterest-512.png">
+        <a href="/index" class="home">Home</a>
+        <a href="/posts/create" class="home">Create</a>
+        
+        <input id="one" type="text" class="search-bar" name="search" placeholder="Search">
+        <button id="two" class="search-bar"></button>
+        <div class="icon-container">
+            <a href="/logout" class="editprofile">Log Out</a>
+        </div>
+    </div>
+    <!--------------------------->
+    <div class="responsive-search-bar">
+        <input type="text">
+        <p class="close">❌</p>
+    </div>
+    <!--------------------------->
+
+   
+        <div style=" border:solid; width: 40%; margin-left: auto; margin-right: auto; right: 0; left: 0;">
+            <div>
+                <strong>Name:</strong>
+                <%= result.fullname %>
+            </div><br>
+            <div>
+                <strong>Bio:</strong>
+                <%= result.bio %>
+            </div><br>
+            <div>
+                <strong>Location:</strong>
+                <%= result.address %>
+            </div><br>
+            <strong>Last Update:</strong>
+            <%= result.updatedAt %>
+        </div><br>
+        </div><br>
+        
+</body>
+
+</html>
