@@ -23,6 +23,18 @@ class Controller {
             role
         })
             .then(data => {
+                return User.findOne({
+                    where: {
+                        username: username
+                    }
+                })
+            })
+            .then(dataFindOne => {
+                return Profile.create( {
+                    UserId: dataFindOne.id 
+                })   
+            })
+            .then( () => {
                 res.redirect('/login')
             })
             .catch(err => {
@@ -38,9 +50,6 @@ class Controller {
     static handleLogin(req, res) {
         const { username, password } = req.body
         User.findOne({
-            include: {
-                model: [Profile]
-            },
             where: {
                 username
             }
@@ -52,7 +61,7 @@ class Controller {
                     if (isValidPassword) {
                         req.session.user = { id: data.id, role: data.role }
                         // req.session.role = data.role
-                        return res.redirect('/profile/create')
+                        return res.redirect('/index')
                     } else {
                         const error = "invalid username / password"
                         return res.redirect(`/login?error=${error}`)
@@ -63,7 +72,7 @@ class Controller {
                 }
             })
             .catch(err => {
-                // console.log(err);
+                console.log(err);
                 res.send(err)
             })
     }
@@ -81,7 +90,10 @@ class Controller {
     static index(req, res) {
         let user;
         Post.findAll({
-            include: [User]
+            include: {
+                model: User, 
+                include: [Profile]
+            }
         })
             .then((users) => {
                 user = users
@@ -108,37 +120,46 @@ class Controller {
                 // res.send(result)
                 res.render('profile', { result })
             }).catch((err) => {
-                console.log(err, "====");
+                // console.log(err, "====");
                 res.send(err)
             });
     }
 
-    static createProfile(req, res) {
-        // res.send('Hello World Ini halaman add profile!')
-        res.render('formProfile')
-    }
+    // static createProfile(req, res) {
+    //     // res.send('Hello World Ini halaman add profile!')
+    //     res.render('formProfile')
+    // }
 
-    static handleCreateProfile(req, res) {
-        const id = req.session.user.id
-        const { fullname, address, bio, photo } = req.body
-        Profile.create({ fullname, address, bio, photo, UserId: id })
-            
-                .then((result)=>{
-                    res.redirect(`/index`)
-                })
-        
-            .catch(err => {
-                // console.log(err, '========== INI ERRORRRRRRR');
-                res.send(err)
-            })
-    }
+    // static handleCreateProfile(req, res) {
+    //     const id = req.session.user.id
+    //     const { fullname, address, bio, photo } = req.body
+    //     Profile.create({ fullname, address, bio, photo, UserId: id })
+    //         .then((result) => {
+    //             // res.send(result)
+    //             res.redirect(`/index`)
+    //         })
+    //         .catch(err => {
+    //             res.send(err)
+    //         })
+    // }
 
     static createPost(req, res) {
-        // res.send('Hello World Ini halaman add profile!')
-        res.render('formProfile')
+        res.render('formPost')
     }
 
-
+    static handleCreatePost(req, res) {
+        // console.log(req.body);
+        const id = req.session.user.id
+        const { title, url, description } = req.body
+        Post.create({ title, url, description, UserId: id })
+        .then((result) => {
+            // res.send(result)
+            res.redirect(`/index`)
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
 }
 
 module.exports = Controller
