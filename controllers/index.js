@@ -30,11 +30,11 @@ class Controller {
                 })
             })
             .then(dataFindOne => {
-                return Profile.create( {
-                    UserId: dataFindOne.id 
-                })   
+                return Profile.create({
+                    UserId: dataFindOne.id
+                })
             })
-            .then( () => {
+            .then(() => {
                 res.redirect('/login')
             })
             .catch(err => {
@@ -91,7 +91,7 @@ class Controller {
         let user;
         Post.findAll({
             include: {
-                model: User, 
+                model: User,
                 include: [Profile]
             }
         })
@@ -126,46 +126,56 @@ class Controller {
     }
 
     static editProfile(req, res) {
-        // res.send('Hello World Ini halaman add profile!')
-        
-        const { id } = req.session.user.id
-        console.log(req.session.user.id)
-        // User.findOne({
-        //     include: [Profile, Post],
+        // Profile.findOne({
+        //     include: User,
         //     where: {
-        //         id: id
+        //         UserId: req.session.user.id
         //     }
         // })
-
-        Profile.findAll({
-            where: {
-                UserId: id
-            }
+        const id = req.session.user.id
+        Profile.findOne({
+            include: User,
+            where: { UserId: id }
         })
-        .then((result) => {
-            // console.log(result, "<<<<<");
-            res.send(result)
-            // res.render('formEditProfile', {result})
-        })
-        .catch(err => {
-            res.send(err)
-        })
-
+            .then((result) => {
+                // console.log(data)
+                // res.send(result)
+                res.render('formEditProfile', { result })
+            })
+            .catch((err) => {
+                res.send(err)
+            })
     }
 
     static handleEditProfile(req, res) {
-        // console.log(req.body);
-        const id = req.session.user.id
-        const { fullname, address, bio, photo } = req.body
-        Profile.create({ fullname, address, bio, photo, UserId: id })
-            .then((result) => {
-                // res.send(result)
-                res.redirect(`/profile`)
-            })
-            .catch(err => {
-                // console.log(err, "<<<<<<")
-                res.send(err)
-            })
+        // res.send('hello world')
+        console.log(req.body);
+        console.log(req.session);
+        /*
+        Session {
+        cookie: {
+            path: '/',
+            _expires: null,
+            originalMaxAge: null,
+            httpOnly: true,
+            secure: false,
+            sameSite: true
+        },
+        user: { id: 5, role: 'Moderator' }
+        }
+        */
+        let { fullname, address, bio, photo } = req.body
+        Profile.update({fullname, address, bio, photo}, {
+            where : {
+                id : req.session.user.id
+            }
+        })
+        .then((data) => {
+            res.redirect('/profile')
+        })
+        .catch((err) => {
+            res.send(err)
+        })
     }
 
     static createPost(req, res) {
@@ -177,13 +187,13 @@ class Controller {
         const id = req.session.user.id
         const { title, url, description } = req.body
         Post.create({ title, url, description, UserId: id })
-        .then((result) => {
-            // res.send(result)
-            res.redirect(`/index`)
-        })
-        .catch(err => {
-            res.send(err)
-        })
+            .then((result) => {
+                // res.send(result)
+                res.redirect(`/index`)
+            })
+            .catch(err => {
+                res.send(err)
+            })
     }
 }
 
