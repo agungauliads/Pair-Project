@@ -13,8 +13,12 @@
           <img draggable="false" class="logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/pinterest-512.png">
           <a href="/index" class="home" >Home</a>
           <a href="/posts/create" class="home" >Create</a>
-          <input id="one" type="text" class="search-bar" name="search" placeholder="Search">
-          <button id="two" class="search-bar"></button>
+          <div style="width:100% ;">
+            <form action="/index" method="get">
+              <input id="one" type="text" class="search-bar" name="search" placeholder="Search">
+              <button id="two" class="search-bar"></button>
+            </form>
+          </div>
           <div class="icon-container">
 
             <a href="/profile/"> 
@@ -45,25 +49,11 @@
         <div class="container">
             <% user.forEach((el) => { %>
             <div class="window">
-              <img class="foto" src="<%= el.url %> ">
-              <p class="content">Username</p>
+              <img class="foto" src="<%= el.url %>">
+              <p class="content"><%= el.title %></p>
               <img class="user" src="<%= el.User.Profile.photo%>">
-              <a class="username"><%=el.User.username%></a>
-              
-              <div class="hover-zone">
-                <div class="top-bar">
-                  <p>Profile ⌵</p>
-                  <a>Save</a>
-                </div>
-                <!-------------------->
-                <div class="bottom-bar">
-                  <a>↗ website.com</a>
-                  <div class="radius-ico">
-                    <img src="https://cdn3.iconfinder.com/data/icons/iconset-1-1/24/icon_set_outlinder-10-256.png">
-                    <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-more-256.png">
-                  </div>
-                </div>
-              </div>
+              <a class="username"><%=userVerified(el.User.username)%></a><br>
+              <a href="/delete/<%=el.id%>"><button type="submit" class="home">Delete</button></a>
             </div>
             <% }) %>           
         </div>

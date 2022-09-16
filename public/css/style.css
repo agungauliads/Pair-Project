@@ -20,7 +20,7 @@
     font-weight:bold;
   }
   .menu .logo{
-    width:50px;
+    width:45px;
     padding:10px;
     cursor:pointer;
     border-radius:50%;
@@ -31,10 +31,10 @@
   .menu .home{
     color:rgb(15, 14, 14);
     background:#c4a7a7;
-    padding:10px 5px;
+    padding:6px 5px;
     cursor:pointer;
     user-select:none;
-    border-radius:40px;
+    border-radius:30px;
     margin:0px 5px;
   }
   .menu .search-bar{
@@ -205,7 +205,7 @@
     display:flex;
     justify-content:center;
     align-items:center;
-    margin:100px 0px;
+    margin:100px 20px;
     flex-wrap:wrap;
   }
   .window{
@@ -385,6 +385,6 @@
       padding:7px;
     }
     .container{
-      margin:-120px 0px 40px 0px;
+      margin:-120px 50px 40px 20px;
     }
   }

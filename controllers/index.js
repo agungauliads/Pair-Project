@@ -1,9 +1,12 @@
 const { User, Profile, Post } = require("../models/index")
+const Op = require('sequelize')
+const userVerified = require('../helpers/userVerified')
 const bcryptjs = require('bcryptjs')
 const GetLocation = require('location-by-ip');
 const SPOTT_API_KEY = 'c061bd9c51msh227937cd442427bp1be0a6jsn905df7c9cdd3';
 const getLocation = new GetLocation(SPOTT_API_KEY);
 // console.log(getLocation.byMyIp, "<======");
+
 
 class Controller {
     static home(req, res) {
@@ -88,14 +91,28 @@ class Controller {
     }
 
     static index(req, res) {
-        let user;
-        Post.findAll({
+        // console.log(req.session)
+        const { search } = req.query
+        let option = {
             include: {
                 model: User,
-                include: [Profile]
+                include: {
+                    model: Profile
+                }
             }
-        })
+        }
+        if (search) {
+            option.include = {
+                ...option.include,
+                title: {
+                    [Op.iLike]: `%${search}%`
+                }
+            }
+        }
+        let user;
+        Post.findAll(option)
             .then((users) => {
+                // console.log(users)
                 user = users
                 return User.findOne({
                     where: { id: req.session.user.id }
@@ -103,7 +120,7 @@ class Controller {
             })
             .then((profile) => {
                 // res.send(user)
-                res.render('index', { user, profile })
+                res.render('index', { user, profile, userVerified })
             })
             .catch((err) => {
                 res.send(err)
@@ -148,34 +165,19 @@ class Controller {
     }
 
     static handleEditProfile(req, res) {
-        // res.send('hello world')
         console.log(req.body);
         console.log(req.session);
-        /*
-        Session {
-        cookie: {
-            path: '/',
-            _expires: null,
-            originalMaxAge: null,
-            httpOnly: true,
-            secure: false,
-            sameSite: true
-        },
-        user: { id: 5, role: 'Moderator' }
-        }
-        */
+        const id = req.session.user.id
         let { fullname, address, bio, photo } = req.body
-        Profile.update({fullname, address, bio, photo}, {
-            where : {
-                id : req.session.user.id
-            }
+        Profile.update({ fullname, address, bio, photo }, {
+            where: { UserId: id }
         })
-        .then((data) => {
-            res.redirect('/profile')
-        })
-        .catch((err) => {
-            res.send(err)
-        })
+            .then((data) => {
+                res.redirect('/profile')
+            })
+            .catch((err) => {
+                res.send(err)
+            })
     }
 
     static createPost(req, res) {
@@ -195,6 +197,22 @@ class Controller {
                 res.send(err)
             })
     }
+
+    static delete(req, res) {
+        let id = req.params.id
+        Post.destroy({
+            where: {
+                id: id
+            }
+        })
+            .then(() => {
+                res.redirect('/index')
+            })
+            .catch((err) => {
+                res.send(err)
+            })
+    }
+
 }
 
 module.exports = Controller
