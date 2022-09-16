@@ -1,7 +1,7 @@
 const isLogin = (function (req,res,next){
     // console.log(req.session);
     if(!req.session.user){
-        const error = "please login first!"
+        const error = "Please login first!"
         res.redirect(`/login?error=${error}`)
     }else{
         next()
@@ -10,7 +10,7 @@ const isLogin = (function (req,res,next){
 const isModerator = (function (req,res,next){
     // console.log(req.session);
     if(req.session.user && req.session.user.role !== "Moderator"){
-        const error = "your role cannot access this session!"
+        const error = "Your role cannot access this session!"
         res.redirect(`/login?error=${error}`)
     }else{
         next()

@@ -4,6 +4,7 @@ const Controller = require('./controllers/index')
 const app = express()
 const port = 3000
 const {isLogin, isModerator, alreadyLogin} = require('./middlewares/authorize')
+const upload = require('express-fileupload')
 
 app.use(
     session({
@@ -28,6 +29,7 @@ app.post('/login', alreadyLogin, Controller.handleLogin)
 app.use(isLogin)
 app.get('/index', Controller.index)
 app.get('/profile/', Controller.readProfile)
+app.use(upload())
 app.get('/profile/edit', Controller.editProfile)
 app.post('/profile/edit', Controller.handleEditProfile)
 app.get('/posts/create', Controller.createPost)

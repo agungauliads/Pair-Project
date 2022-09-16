@@ -3,7 +3,7 @@ const Op = require('sequelize')
 const convertDate = require('../helpers/convertDate')
 const userVerified = require('../helpers/userVerified')
 const bcryptjs = require('bcryptjs')
-
+const upload = require('express-fileupload')
 
 class Controller {
     static home(req, res) {
@@ -63,11 +63,11 @@ class Controller {
                         // req.session.role = data.role
                         return res.redirect('/index')
                     } else {
-                        const error = "invalid username / password"
+                        const error = "Invalid username / password"
                         return res.redirect(`/login?error=${error}`)
                     }
                 } else {
-                    const error = "invalid username / password"
+                    const error = "Invalid username / password"
                     return res.redirect(`/login?error=${error}`)
                 }
             })
@@ -140,12 +140,6 @@ class Controller {
     }
 
     static editProfile(req, res) {
-        // Profile.findOne({
-        //     include: User,
-        //     where: {
-        //         UserId: req.session.user.id
-        //     }
-        // })
         const id = req.session.user.id
         Profile.findOne({
             include: User,
