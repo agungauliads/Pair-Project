@@ -49,8 +49,9 @@
         <div class="container">
             <% user.forEach((el) => { %>
             <div class="window">
-              <img class="foto" src="<%= el.url %>">
+              <img class="foto"" src="<%= el.url %>">
               <p class="content"><%= el.title %></p>
+              <p class="content-2"><%= el.description %></p>
               <img class="user" src="<%= el.User.Profile.photo%>">
               <a class="username"><%=userVerified(el.User.username)%></a><br>
               <a href="/delete/<%=el.id%>"><button type="submit" class="home">Delete</button></a>

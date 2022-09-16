@@ -1,11 +1,8 @@
 const { User, Profile, Post } = require("../models/index")
 const Op = require('sequelize')
+const convertDate = require('../helpers/convertDate')
 const userVerified = require('../helpers/userVerified')
 const bcryptjs = require('bcryptjs')
-const GetLocation = require('location-by-ip');
-const SPOTT_API_KEY = 'c061bd9c51msh227937cd442427bp1be0a6jsn905df7c9cdd3';
-const getLocation = new GetLocation(SPOTT_API_KEY);
-// console.log(getLocation.byMyIp, "<======");
 
 
 class Controller {
@@ -135,7 +132,7 @@ class Controller {
         })
             .then((result) => {
                 // res.send(result)
-                res.render('profile', { result })
+                res.render('profile', { result, convertDate })
             }).catch((err) => {
                 // console.log(err, "====");
                 res.send(err)
@@ -194,7 +191,15 @@ class Controller {
                 res.redirect(`/index`)
             })
             .catch(err => {
-                res.send(err)
+                // console.log(err.name);
+                if (err.name === "SequelizeValidationError") {
+                    let errors = err.errors.map((el) => {
+                        return el.message
+                    })
+                    res.send(errors)
+                } else {
+                    res.send(err)
+                }
             })
     }
 

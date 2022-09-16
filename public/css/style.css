@@ -205,14 +205,14 @@
     display:flex;
     justify-content:center;
     align-items:center;
-    margin:100px 20px;
+    margin:150px 20px;
     flex-wrap:wrap;
   }
   .window{
-    border-radius:20px;
+    border-radius:10px;
     margin:10px;
     width:250px;
-    height:320px;
+    height:575px;
     overflow:hidden;
     position:relative;
     z-index:97;
@@ -220,6 +220,7 @@
   .window .foto{
     width:100%;
     border-radius:20px;
+    display: inline-block;
     cursor:zoom-in;
   }
   .window .content{
@@ -227,6 +228,12 @@
     margin-top:-2px;
     font-size:13px;
     font-weight:bold;
+  }
+  .window .content-2{
+    margin-left:10px;
+    margin-top:-2px;
+    font-size:10px;
+    font-weight:normal
   }
   .window .user{
     width:40px;
@@ -385,6 +392,6 @@
       padding:7px;
     }
     .container{
-      margin:-120px 50px 40px 20px;
+      margin:-120px 0px 40px 0px;
     }
   }
